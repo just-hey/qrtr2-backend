@@ -44,7 +44,8 @@ function createClient(req, res, next) {
 
 //creates a new note for a client
 function createNote(req, res, next) {
-  
+  let body = req.body
+  let data = model.createNote(body)
   res.status(200).json({ data })
 }
 
@@ -58,25 +59,31 @@ function updateTherapist(req, res, next) {
 
 //updates a client's info
 function updateClient(req, res, next) {
-
+  let id = req.params.id
+  let body = req.body
+  let data = model.updateClient(id, body)
   res.status(200).json({ data })
 }
 
 //updates a single SOAP note.
 function updateNote(req, res, next) {
-
+  let id = req.params.id
+  let body = req.body
+  let data = model.updateNote(id, body)
   res.status(200).json({ data })
 }
 
 //set's therapist to inactive
 function destroyTherapist(req, res, next) {
-
+  let id = req.params.id
+  let data = model.destroyTherapist(id)
   res.status(200).json({ data })
 }
 
 //set's client to inactive
 function destroyClient(req, res, next) {
-
+  let id = req.params.id
+  let data = model.destroyClient(id)
   res.status(200).json({ data })
 }
 

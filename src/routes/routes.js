@@ -2,24 +2,24 @@ const express = require('express')
 const router = express.Router()
 const ctrl = require('../controllers/controllers.js')
 
-router.get('/therapist', ctrl.getAllTherapists)
-router.get('/therapist/:id', ctrl.getOneTherapist)
-router.get('/client', ctrl.getAllClients)
-router.get('/client/:id', ctrl.getOneClient)
+router.get('/therapists', ctrl.getAllTherapists)
+router.get('/therapists/:id', ctrl.getOneTherapist)
+router.get('/clients', ctrl.getAllClients)
+router.get('/clients/:id', ctrl.getOneClient) 
 
-router.post('/therapist', ctrl.createTherapist)
-router.post('/client', ctrl.createClient)
-
-//halp
-router.post('/client/:id', ctrl.createNote)
-
-router.put('/therapist/:id', ctrl.updateTherapist)
-router.put('/client/:id', ctrl.updateClient)
+router.post('/therapists', ctrl.createTherapist)
+router.post('/clients', ctrl.createClient)
 
 //halp
-router.put('/:id/client/:id', ctrl.updateNote)
+router.post('/clients/:id', ctrl.createNote)
 
-router.delete('/therapist/:id', ctrl.destroyTherapist)
-router.delete('/client/:id', ctrl.destroyClient)
+router.put('/therapists/:id', ctrl.updateTherapist)
+router.put('/clients/:id', ctrl.updateClient)
+
+//halp
+router.put('/:id/clients/:id', ctrl.updateNote)
+
+router.delete('/therapists/:id', ctrl.destroyTherapist)
+router.delete('/clients/:id', ctrl.destroyClient)
 
 module.exports = router
