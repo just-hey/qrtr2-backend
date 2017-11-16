@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const knex = require('../../knex.js')
 
 let clients =
 [
@@ -76,43 +76,51 @@ let therapists =
 
 
 // returns all therapists
-function getAllTherapists() {
-  return therapists
-}
 // function getAllTherapists() {
-//   return knex('therapists')
+//   return therapists
 // }
+function getAllTherapists() {
+  return knex('therapists')
+    .then( (response) => {
+      return response
+    })
+}
 
 
 //returns one therapist
-function getOneTherapist(id) {
-  let errors = []
-  let response
-  for (var i = 1; i < therapists.length; i++) {
-    console.log(i);
-    if (therapists[i].id == id) {
-      response = therapists[i]
-    } else {
-      errors.push('Can not find a therapist with that ID')
-      response = errors
-    }
-  }
-  return response
-}
-
-//THIS MAY WORK?
 // function getOneTherapist(id) {
 //   let errors = []
 //   let response
-//   let foundTherapist = knex('therapists').where({'id', id})
-//   if (foundTherapist.length > 0) {
-//     response = foundTherapist
-//   } else {
-//     errors.push('Can not find a therapist with that ID')
-//     response = errors
+//   for (var i = 1; i < therapists.length; i++) {
+//     if (therapists[i].id == id) {
+//       response = therapists[i]
+//     } else {
+//       errors.push('Can not find a therapist with that ID')
+//       response = errors
+//     }
 //   }
 //   return response
 // }
+
+//THIS MAY WORK?
+function getOneTherapist(id) {
+  let errors = []
+  let response
+  let foundTherapist
+  return knex('therapists').where('id', '=', id)
+    .then((response) => {
+      console.log('on the inside', response);
+      return response
+    })
+  console.log('maybe?');
+  if (foundTherapist.length > 0) {
+    response = foundTherapist
+  } else {
+    errors.push('Can not find a therapist with that ID')
+    response = errors
+  }
+  return response
+}
 
 //returns one client
 function getOneClient(id) {
@@ -130,10 +138,22 @@ function getOneClient(id) {
 }
 
 //returns all clients
+// function getAllClients() {
+//   return clients
+// }
 function getAllClients() {
-  return clients
+  return knex('clients')
+    .then( (response) => {
+      return response
+    })
 }
 
+function getAllNotes() {
+  return knex('notes')
+    .then((response) => {
+      return response
+    })
+}
 //creates a new therapist
 function createClient(body) {
   let errors = []
@@ -223,4 +243,4 @@ function destroyClient() {
 
 }
 
-module.exports = { getAllTherapists, getOneTherapist, getAllClients, getOneClient, createTherapist, createClient, createNote, updateTherapist, updateClient, updateNote, destroyTherapist, destroyClient }
+module.exports = { getAllTherapists, getOneTherapist, getAllClients, getAllNotes, getOneClient, createTherapist, createClient, createNote, updateTherapist, updateClient, updateNote, destroyTherapist, destroyClient }

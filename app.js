@@ -1,9 +1,11 @@
 const express = require('express')
 const app = express()
-const port = process.env.POT || 3000
+const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const soapRoutes = require('./src/routes/routes.js')
+const cors = require('cors')
+app.use(cors())
 
 app.disable('x-powered-by')
 if (process.env.NODE_ENV === 'development')
@@ -11,6 +13,7 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 
 app.use('/', soapRoutes)
+
 
 app.use((err, req, res, next) => {
   const status = err.status || 500
