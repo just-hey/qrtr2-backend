@@ -12,8 +12,6 @@ function getAllTherapists (req, res, next) {
 function getOneTherapist(req, res, next) {
   let id = req.params.id
   model.getOneTherapist(id).then(data => {
-    console.log('data?', data)
-    // console.log('response?', response)
     res.status(200).json({ data })
   })
 }
@@ -41,6 +39,7 @@ function getAllNotes(req, res, next) {
 }
 
 //creates a new therapist
+
 function createTherapist(req, res, next) {
   let body = req.body
   model.createTherapist(body).then(data => {
@@ -66,8 +65,10 @@ function createNote(req, res, next) {
 
 //updates a therapist's info
 function updateTherapist(req, res, next) {
-  let id = req.params.id
+  // let id = req.params.id
+  let id = req.body.id
   let body = req.body
+  console.log('in ctrl for updateTherapist', id, body)
   model.updateTherapist(id, body).then(data => {
     res.status(200).json({ data })
   })

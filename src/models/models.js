@@ -1,80 +1,5 @@
 const knex = require('../../knex.js')
 
-let clients =
-[
-  {
-    id: 1,
-    first_name: 'Jack',
-    last_name: 'Jackson',
-    active: false,
-  },
-  {
-    id: 2,
-    first_name: 'Eric',
-    last_name: 'Jackson',
-    active: true
-  },
-  {
-    id: 3,
-    first_name: 'Sarah',
-    last_name: 'Duddly',
-    active: true
-  }
-]
-//
-let therapists =
-[
-  {
-    id: 1,
-    first_name: 'Bob',
-    last_name: 'Dill',
-    active: false
-  },
-  {
-    id: 2,
-    first_name: 'Jack',
-    last_name: 'Smith',
-    active: true
-  },
-  {
-    id: 3,
-    first_name: 'Tom',
-    last_name: 'Gole',
-    active: false
-  }
-]
-//
-// let therapists_clients =
-// [
-//   {
-//     therapist_id: 1,
-//     client_id:1
-//   },
-//   {
-//     therapist_id: 1,
-//     client_id: 2
-//   }
-// ]
-//
-// let notes =
-// [
-//   {
-//     id: 1,
-//     therapist_id: 1,
-//     client_id: 1,
-//     content: 'lots of words',
-//     date_created: Date()
-//   },
-//   {
-//     id: 2,
-//     therapist_id: 1,
-//     client_id: 2,
-//     content: 'lots other of words',
-//     date_created: Date()
-//   }
-// ]
-
-
 // returns all therapists
 // function getAllTherapists() {
 //   return therapists
@@ -88,21 +13,6 @@ function getAllTherapists() {
 
 
 //returns one therapist
-// function getOneTherapist(id) {
-//   let errors = []
-//   let response
-//   for (var i = 1; i < therapists.length; i++) {
-//     if (therapists[i].id == id) {
-//       response = therapists[i]
-//     } else {
-//       errors.push('Can not find a therapist with that ID')
-//       response = errors
-//     }
-//   }
-//   return response
-// }
-
-//THIS MAY WORK?
 function getOneTherapist(id) {
   let errors = []
   let response
@@ -154,73 +64,74 @@ function getAllNotes() {
       return response
     })
 }
+
 //creates a new therapist
 function createClient(body) {
-  let errors = []
-  let response
   let first_name = body.first_name
   let last_name = body.last_name
-  if ( !first_name || !last_name ) {
-    errors.push('First and Last names are required')
-    response = { errors }
-  } else {
-    let newClient = { id: uuid(), first_name, last_name, notes: [] }
-    clients.push(newClient)
-    response = newClient
-  }
-  return response
+  console.log('in models for create client', first_name);
+  return knex('clients')
+  .insert({first_name, last_name})
+  .then((response) => {
+    console.log('then...');
+    return response
+  })
 }
 
 //creates a new client with no notes
 function createTherapist(body) {
-  let errors = []
-  let response
   let first_name = body.first_name
   let last_name = body.last_name
-  if ( !first_name || !last_name ) {
-    errors.push('First and Last names are required')
-    response = { errors }
-  } else {
-    let newTherapist = { id: uuid(), first_name, last_name, clients: [], active: true }
-    therapists.push(newTherapist)
-    response = newTherapist
-  }
-  return response
+  return knex('therapists')
+  .insert({first_name, last_name})
+  .then((response) => {
+    return response
+  })
 }
 
 //creates a new note for a client
+// function createNote(body) {
+//   let errors = []
+//   let response
+//   let author = body.therapist_id
+//   let client = body.client_id
+//   let content = body.content
+//   if (!author || !client || !content) {
+//     errors.push('Author, Client, and content are all required.')
+//     response = { errors }
+//   } else {
+//     let newNote = { id: uuid(), therapist_id: author, client_id: client, content, date: Date() }
+//     notes.push(newNote)
+//     response = newNote
+//   }
+//   return response
+// }
+
 function createNote(body) {
-  let errors = []
-  let response
-  let author = body.therapist_id
-  let client = body.client_id
+  let therapist_id = parseInt(body.therapist_id)
+  let client_id = parseInt(body.client_id)
   let content = body.content
-  if (!author || !client || !content) {
-    errors.push('Author, Client, and content are all required.')
-    response = { errors }
-  } else {
-    let newNote = { id: uuid(), therapist_id: author, client_id: client, content, date: Date() }
-    notes.push(newNote)
-    response = newNote
-  }
-  return response
+  console.log('in models for create note', client_id);
+  return knex('notes')
+  .insert({therapist_id, client_id, content, created_at: knex.fn.now()})
+  .then((response) => {
+    console.log('then...');
+    return response
+  })
 }
 
 //updates a therapists info
 function updateTherapist(id, body) {
-  let errors = []
-  let response
-  let first_name = body.first_name
-  let last_name = body.last_name
-  let active = body.active
-  for (var i = 0; i < therapists.length; i++) {
-    if (therapists[i].id == id) {
-      let updatedTherapist = { id: id, first_name: first_name, last_name: last_name, active: active }
-      therapists.splice(i, 1, updatedTherapist)
-      response = updatedTherapist
-    }
-  return response
-  }
+  let first_name2 = body.first_name
+  let last_name2 = body.last_name
+  // let active = body.isActive
+  console.log('in models for update ther', first_name);
+  return knex('therapists')
+    .where({id: id})
+    .update({ first_name: first_name2, last_name: last_name2})
+    .then((response) => {
+      return response
+    })
 }
 
 //updates a client's info
