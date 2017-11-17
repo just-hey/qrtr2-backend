@@ -11,7 +11,7 @@ module.exports = {
     seeds: {
       directory: path.join(__dirname, 'seeds')
     }
-  }
+  },
   production: {
     client: 'postgresql',
     connection: 'https://damp-atoll-31773.herokuapp.com/'
